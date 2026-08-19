@@ -1,0 +1,26 @@
+# OS clutter
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python (add_beta_code.py is run locally)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Never publish build output or source here — this repo is distribution-only.
+# Installers are attached to GitHub Releases, not committed.
+*.exe
+*.msi
+*.zip
+*.log
