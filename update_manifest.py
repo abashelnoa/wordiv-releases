@@ -44,10 +44,13 @@ def main() -> int:
     args = ap.parse_args()
 
     if not args.installer.is_file():
-        sys.exit(f"error: no such file: {args.installer}. Nothing written.")
+        sys.exit(f"error: no such file: {args.installer}. Nothing written. "
+                  "Point this at the built installer, e.g. "
+                  "dist\installer\Wordiv-Setup.exe.")
     new = version_tuple(args.version)
     if new is None:
-        sys.exit(f"error: not a version number: {args.version}. Nothing written.")
+        sys.exit(f"error: not a version number: {args.version}. Nothing written. "
+                  "Use a plain version like 1.3.1 (a leading 'v' is fine, e.g. v1.3.1).")
 
     if MANIFEST.exists():
         try:
@@ -55,6 +58,10 @@ def main() -> int:
         except (json.JSONDecodeError, OSError) as exc:
             sys.exit(f"error: {MANIFEST} exists but could not be read ({exc}). "
                      "Nothing written. Fix or remove the file, then re-run.")
+        if not isinstance(current, dict):
+            sys.exit(f"error: {MANIFEST} is valid JSON but not an object "
+                     f"(found {type(current).__name__}: {current!r}). "
+                     "Nothing written. Fix the file by hand, then re-run.")
         stored = current.get("latest_version") or ""
         if stored:
             old = version_tuple(str(stored))
