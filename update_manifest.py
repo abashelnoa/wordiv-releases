@@ -44,17 +44,28 @@ def main() -> int:
     args = ap.parse_args()
 
     if not args.installer.is_file():
-        return ap.error(f"no such file: {args.installer}")
+        sys.exit(f"error: no such file: {args.installer}. Nothing written.")
     new = version_tuple(args.version)
     if new is None:
-        return ap.error(f"not a version number: {args.version}")
+        sys.exit(f"error: not a version number: {args.version}. Nothing written.")
 
     if MANIFEST.exists():
-        current = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        old = version_tuple(str(current.get("latest_version") or "")) or ()
-        if old and new <= old:
-            sys.exit(f"error: {args.version} is not newer than the published "
-                     f"{current.get('latest_version')}. Nothing written.")
+        try:
+            current = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as exc:
+            sys.exit(f"error: {MANIFEST} exists but could not be read ({exc}). "
+                     "Nothing written. Fix or remove the file, then re-run.")
+        stored = current.get("latest_version") or ""
+        if stored:
+            old = version_tuple(str(stored))
+            if old is None:
+                sys.exit(f"error: {MANIFEST} has an unparseable latest_version "
+                         f"({stored!r}). Nothing written. Fix the file by hand, "
+                         "then re-run.")
+            if new <= old:
+                sys.exit(f"error: {args.version} is not newer than the published "
+                         f"{stored}. Nothing written. Bump the version, or confirm "
+                         "this isn't a re-run of an already-shipped release.")
 
     manifest = {
         "latest_version": args.version.lstrip("v"),
