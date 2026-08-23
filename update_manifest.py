@@ -44,9 +44,11 @@ def main() -> int:
     args = ap.parse_args()
 
     if not args.installer.is_file():
+        # Raw string: \i and \W are not escapes today, but they are a
+        # SyntaxWarning on 3.12+ and one day an error.
         sys.exit(f"error: no such file: {args.installer}. Nothing written. "
-                  "Point this at the built installer, e.g. "
-                  "dist\installer\Wordiv-Setup.exe.")
+                  r"Point this at the built installer, e.g. "
+                  r"dist\installer\Wordiv-Setup.exe.")
     new = version_tuple(args.version)
     if new is None:
         sys.exit(f"error: not a version number: {args.version}. Nothing written. "
