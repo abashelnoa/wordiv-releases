@@ -1,5 +1,6 @@
 {
-  "latest_version": "1.3.0",
-  "download_url": "",
-  "release_notes": ""
+  "latest_version": "1.3.1",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.3.1/Wordiv-Setup.exe",
+  "sha256": "14af2a5976885e5ffa79c98cea20c8e2481e097debf8e6fe23a6dcf2083fceda",
+  "release_notes": "עדכון אוטומטי מתוך התוכנה — Wordiv בודקת פעם ביום ומציעה להתקין בלחיצה אחת."
 }
