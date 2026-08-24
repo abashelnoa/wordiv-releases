@@ -181,10 +181,26 @@ function claimNextCode(email) {
   return { code: chosen, remaining: remaining };
 }
 
+/** Minimal HTML escaping for text interpolated into htmlBody below. */
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function sendCode(email, name, code) {
-  var hello = name ? ('שלום ' + name + ',') : 'שלום,';
+  var helloText = name ? ('שלום ' + name + ',') : 'שלום,';
+  var helloHtml = name ? ('שלום ' + escapeHtml(name) + ',') : 'שלום,';
+
+  // Plain-text fallback for clients that can't render HTML. Gmail itself
+  // prefers htmlBody below, which is what actually fixes the alignment --
+  // a plain-text mail client picks each PARAGRAPH's direction from its own
+  // first character, and a paragraph starting with the code or the URL
+  // (Latin/digits) renders left-aligned and drags the rest with it.
   var body =
-    hello + '\n\n' +
+    helloText + '\n\n' +
     'תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:\n\n' +
     '    ' + code + '\n\n' +
     'להורדה והתקנה של ' + PRODUCT + ':\n    ' + DOWNLOAD_URL + '\n\n' +
@@ -194,10 +210,36 @@ function sendCode(email, name, code) {
     'הקוד אישי ומיועד רק לך — נא לא לשתף אותו.\n\n' +
     'תודה שאת/ה עוזר/ת לנו לבדוק את התוכנה, ונשמח לשמוע ממך מה עובד ומה לא.\n';
 
+  // The whole message is forced dir="rtl" / text-align:right, and only the
+  // code and the URL are wrapped in their own dir="ltr" span -- an island
+  // that stays left-to-right internally WITHOUT flipping the paragraph
+  // around it, the same bidi-isolation idea the app itself uses for mixed
+  // Hebrew/English text.
+  var htmlBody =
+    '<div dir="rtl" style="text-align:right;font-family:Arial,Tahoma,sans-serif;' +
+    'font-size:14px;line-height:1.7;color:#222;">' +
+    '<p>' + helloHtml + '</p>' +
+    '<p>תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:</p>' +
+    '<p style="text-align:center;">' +
+      '<span dir="ltr" style="display:inline-block;font-family:Consolas,monospace;' +
+      'font-size:18px;font-weight:bold;letter-spacing:1px;background:#f2f2f2;' +
+      'padding:8px 16px;border-radius:6px;">' + escapeHtml(code) + '</span>' +
+    '</p>' +
+    '<p>להורדה והתקנה של ' + PRODUCT + ':<br>' +
+      '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;">' +
+      DOWNLOAD_URL + '</a></p>' +
+    '<p>בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
+    'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
+    'ההפעלה.</p>' +
+    '<p>הקוד אישי ומיועד רק לך — נא לא לשתף אותו.</p>' +
+    '<p>תודה שאת/ה עוזר/ת לנו לבדוק את התוכנה, ונשמח לשמוע ממך מה עובד ומה לא.</p>' +
+    '</div>';
+
   MailApp.sendEmail({
     to: email,
     subject: 'קוד הגישה שלך לבטא של ' + PRODUCT,
     body: body,
+    htmlBody: htmlBody,
     name: PRODUCT
   });
 }
