@@ -44,8 +44,18 @@
 // ---- settings ------------------------------------------------------------
 
 var CODES_SHEET = 'codes';
-var EMAIL_QUESTION = 'Email';     // the form question holding the address
+// The form question titles. Both are matched case-insensitively, and several
+// spellings are accepted, because Google names the automatic column
+// "Email Address" while a question you add yourself is usually just "Email" --
+// and an AI-generated form may pick something else again. If the address is
+// still not found, the script falls back to the verified respondent email that
+// "Collect email addresses" provides, so a mismatch here cannot silently drop
+// a signup.
+var EMAIL_QUESTION = 'Email';
+var EMAIL_ALIASES = ['email', 'email address', 'e-mail', 'your email',
+                     'email addresses', 'כתובת אימייל', 'אימייל'];
 var NAME_QUESTION = 'Name';       // optional; used only to say hello
+var NAME_ALIASES = ['name', 'full name', 'your name', 'first name', 'שם'];
 var PRODUCT = 'Wordiv';
 var DOWNLOAD_URL = 'https://github.com/abashelnoa/wordiv-releases/releases/latest';
 var TRIAL_DAYS = 60;
@@ -55,9 +65,16 @@ var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
 
 function onFormSubmit(e) {
   var answers = readAnswers(e);
-  var email = answers[EMAIL_QUESTION];
+  var email = pick(answers, EMAIL_QUESTION, EMAIL_ALIASES) || respondentEmail(e);
   if (!email) {
-    console.error('No email in the submission; nothing sent.');
+    console.error('No email in the submission; nothing sent. Columns seen: ' +
+                  Object.keys(answers).join(', '));
+    MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
+      PRODUCT + ' beta: a signup had no email address',
+      'A form response arrived with no usable email address, so no code was ' +
+      'sent. Columns seen:\n\n  ' + Object.keys(answers).join('\n  ') +
+      '\n\nAdd the right title to EMAIL_ALIASES in the script, or turn on ' +
+      '"Collect email addresses" in the form.');
     return;
   }
 
@@ -83,7 +100,7 @@ function onFormSubmit(e) {
     return;
   }
 
-  sendCode(email, answers[NAME_QUESTION] || '', code);
+  sendCode(email, pick(answers, NAME_QUESTION, NAME_ALIASES), code);
 
   if (remaining < LOW_WATER_MARK) {
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
@@ -105,6 +122,30 @@ function readAnswers(e) {
     }
   }
   return out;
+}
+
+/** First non-empty answer whose title matches `preferred` or any alias. */
+function pick(answers, preferred, aliases) {
+  var wanted = [String(preferred || '').toLowerCase()];
+  for (var i = 0; i < aliases.length; i++) { wanted.push(aliases[i].toLowerCase()); }
+  for (var w = 0; w < wanted.length; w++) {
+    for (var key in answers) {
+      if (key.toLowerCase() === wanted[w] && answers[key]) { return answers[key]; }
+    }
+  }
+  return '';
+}
+
+/** The verified address Google attaches when "Collect email addresses" is on. */
+function respondentEmail(e) {
+  try {
+    if (e && e.response && e.response.getRespondentEmail) {
+      return String(e.response.getRespondentEmail() || '').trim();
+    }
+  } catch (err) {
+    console.warn('could not read the respondent email: ' + err);
+  }
+  return '';
 }
 
 /** Take the first row with no assignee. Returns {code, remaining}. */
