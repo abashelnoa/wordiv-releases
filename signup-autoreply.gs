@@ -57,6 +57,10 @@ var EMAIL_ALIASES = ['email', 'email address', 'e-mail', 'your email',
 var NAME_QUESTION = 'Name';       // optional; used only to say hello
 var NAME_ALIASES = ['name', 'full name', 'your name', 'first name', 'שם'];
 var PRODUCT = 'Wordiv';
+// Where the confirmation email sends people to download the installer. Points
+// straight at the GitHub release for now; once a real site exists, change
+// this ONE line to the site's download page and nothing else needs to move --
+// the file itself can still live on GitHub, or move anywhere the site links to.
 var DOWNLOAD_URL = 'https://github.com/abashelnoa/wordiv-releases/releases/latest';
 var TRIAL_DAYS = 60;
 var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
@@ -93,10 +97,10 @@ function onFormSubmit(e) {
 
   if (!code) {
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
-      PRODUCT + ' beta: OUT OF CODES',
-      'Someone signed up (' + email + ') and there were no codes left.\n' +
-      'Run make_code_batch.py, push, and paste the new rows into the "' +
-      CODES_SHEET + '" sheet, then send them a code by hand.');
+      PRODUCT + ' בטא: נגמרו הקודים',
+      'מישהו נרשם (' + email + ') ולא נשארו קודים.\n' +
+      'הרץ python make_code_batch.py, דחוף, והדבק את השורות החדשות ללשונית "' +
+      CODES_SHEET + '", ואז שלח לו קוד ידנית.');
     return;
   }
 
@@ -104,10 +108,10 @@ function onFormSubmit(e) {
 
   if (remaining < LOW_WATER_MARK) {
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
-      PRODUCT + ' beta: only ' + remaining + ' codes left',
-      'Time to mint more:\n\n  python make_code_batch.py 100\n' +
+      PRODUCT + ' בטא: נשארו רק ' + remaining + ' קודים',
+      'זמן לייצר עוד:\n\n  python make_code_batch.py 100\n' +
       '  git add beta-codes.json && git commit -m "Publish 100 beta codes"\n' +
-      '  git push\n\nThen paste the new rows into the "' + CODES_SHEET + '" sheet.');
+      '  git push\n\nואז להדביק את השורות החדשות ללשונית "' + CODES_SHEET + '".');
   }
 }
 
@@ -178,22 +182,21 @@ function claimNextCode(email) {
 }
 
 function sendCode(email, name, code) {
-  var hello = name ? ('Hi ' + name + ',') : 'Hi,';
+  var hello = name ? ('שלום ' + name + ',') : 'שלום,';
   var body =
     hello + '\n\n' +
-    'Thanks for joining the ' + PRODUCT + ' beta. Here is your personal ' +
-    'access code:\n\n' +
+    'תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:\n\n' +
     '    ' + code + '\n\n' +
-    'Download and install ' + PRODUCT + ':\n    ' + DOWNLOAD_URL + '\n\n' +
-    'The first time you run it, paste the code in when asked. You only need ' +
-    'to do that once, and it needs an internet connection just for that ' +
-    'first check. Your trial runs for ' + TRIAL_DAYS + ' days from then.\n\n' +
-    'The code is yours alone — please do not share it.\n\n' +
-    'Thanks for helping test it, and do tell us what breaks.\n';
+    'להורדה והתקנה של ' + PRODUCT + ':\n    ' + DOWNLOAD_URL + '\n\n' +
+    'בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
+    'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
+    'ההפעלה.\n\n' +
+    'הקוד אישי ומיועד רק לך — נא לא לשתף אותו.\n\n' +
+    'תודה שאת/ה עוזר/ת לנו לבדוק את התוכנה, ונשמח לשמוע ממך מה עובד ומה לא.\n';
 
   MailApp.sendEmail({
     to: email,
-    subject: 'Your ' + PRODUCT + ' beta access code',
+    subject: 'קוד הגישה שלך לבטא של ' + PRODUCT,
     body: body,
     name: PRODUCT
   });
