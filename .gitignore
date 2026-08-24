@@ -24,3 +24,9 @@ venv/
 *.msi
 *.zip
 *.log
+
+# Batches of PLAINTEXT beta codes written by make_code_batch.py. This repo is
+# PUBLIC — committing one of these would publish working codes and defeat the
+# entire point of storing only hashes. Never remove these two lines.
+codes-*.csv
+codes-*.txt
