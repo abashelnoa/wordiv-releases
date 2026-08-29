@@ -262,7 +262,6 @@ function sendCode(email, name, code) {
   });
 }
 
-/** Run this by hand from the editor to check the sheet is wired up. */
 /** Sent to the SIGNER when the pool is empty -- see the comment above the call. */
 function sendSoldOut(email, name) {
   var helloText = name ? ('שלום ' + name + ',') : 'שלום,';
@@ -294,6 +293,7 @@ function sendSoldOut(email, name) {
   });
 }
 
+/** Run this by hand from the editor to check the sheet is wired up. */
 function checkSetup() {
   var sheet = SpreadsheetApp.getActive().getSheetByName(CODES_SHEET);
   if (!sheet) {
