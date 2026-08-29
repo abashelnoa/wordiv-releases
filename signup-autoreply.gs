@@ -96,11 +96,16 @@ function onFormSubmit(e) {
   }
 
   if (!code) {
+    // Two emails, two audiences: the signer-upper must not be left in
+    // silence after the generic "your response was recorded" Forms page --
+    // without this they never learn why no code arrived. The admin alert
+    // stays as the actionable "go mint more" nudge.
+    sendSoldOut(email, pick(answers, NAME_QUESTION, NAME_ALIASES));
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
       PRODUCT + ' בטא: נגמרו הקודים',
-      'מישהו נרשם (' + email + ') ולא נשארו קודים.\n' +
+      'מישהו נרשם (' + email + ') ולא נשארו קודים - נשלחה לו הודעת "אזלו הקודים".\n' +
       'הרץ python make_code_batch.py, דחוף, והדבק את השורות החדשות ללשונית "' +
-      CODES_SHEET + '", ואז שלח לו קוד ידנית.');
+      CODES_SHEET + '".');
     return;
   }
 
@@ -258,6 +263,37 @@ function sendCode(email, name, code) {
 }
 
 /** Run this by hand from the editor to check the sheet is wired up. */
+/** Sent to the SIGNER when the pool is empty -- see the comment above the call. */
+function sendSoldOut(email, name) {
+  var helloText = name ? ('שלום ' + name + ',') : 'שלום,';
+  var helloHtml = name ? ('שלום ' + escapeHtml(name) + ',') : 'שלום,';
+
+  var body =
+    helloText + '\n\n' +
+    'תודה על ההתעניינות שלך ב-' + PRODUCT + '! כרגע כל קודי הגישה לבטא ' +
+    'נוצלו. אנחנו מוסיפים עוד קודים בהמשך — כדאי לנסות למלא את הטופס ' +
+    'שוב בעוד כמה ימים.\n\n' +
+    'תודה על הסבלנות!\n';
+
+  var htmlBody =
+    '<div dir="rtl" style="text-align:right;font-family:Arial,Tahoma,sans-serif;' +
+    'font-size:14px;line-height:1.7;color:#222;">' +
+    '<p>' + helloHtml + '</p>' +
+    '<p>תודה על ההתעניינות שלך ב-' + PRODUCT + '! כרגע כל קודי הגישה לבטא ' +
+    'נוצלו. אנחנו מוסיפים עוד קודים בהמשך — כדאי לנסות למלא את הטופס ' +
+    'שוב בעוד כמה ימים.</p>' +
+    '<p>תודה על הסבלנות!</p>' +
+    '</div>';
+
+  MailApp.sendEmail({
+    to: email,
+    subject: PRODUCT + ' — כרגע אין קודי גישה פנויים',
+    body: body,
+    htmlBody: htmlBody,
+    name: PRODUCT
+  });
+}
+
 function checkSetup() {
   var sheet = SpreadsheetApp.getActive().getSheetByName(CODES_SHEET);
   if (!sheet) {
