@@ -61,7 +61,7 @@ var PRODUCT = 'Wordiv';
 // straight at the GitHub release for now; once a real site exists, change
 // this ONE line to the site's download page and nothing else needs to move --
 // the file itself can still live on GitHub, or move anywhere the site links to.
-var DOWNLOAD_URL = 'https://github.com/abashelnoa/wordiv-releases/releases/latest';
+var DOWNLOAD_URL = 'https://www.wordiv.app/#/download';
 var TRIAL_DAYS = 60;
 var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
 
@@ -203,7 +203,7 @@ function sendCode(email, name, code) {
     helloText + '\n\n' +
     'תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:\n\n' +
     '    ' + code + '\n\n' +
-    'להורדה והתקנה של ' + PRODUCT + ':\n    ' + DOWNLOAD_URL + '\n\n' +
+    'להורדה: ' + DOWNLOAD_URL + '\n\n' +
     'בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.\n\n' +
@@ -225,8 +225,21 @@ function sendCode(email, name, code) {
       'font-size:18px;font-weight:bold;letter-spacing:1px;background:#f2f2f2;' +
       'padding:8px 16px;border-radius:6px;">' + escapeHtml(code) + '</span>' +
     '</p>' +
-    '<p>להורדה והתקנה של ' + PRODUCT + ':<br>' +
-      '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;">' +
+    '<p style="text-align:center;font-size:12px;color:#777;margin-top:-6px;">' +
+      '(לחיצה כפולה על הקוד מסמנת אותו להעתקה)</p>' +
+    // A real button -- inline styles only, so it survives Outlook/Gmail
+    // stripping <style> blocks. No JavaScript: an email client cannot run
+    // a "copy" button, so the code above is a big, easy-to-select chip
+    // instead -- the same pattern Stripe/GitHub use for the same reason.
+    '<p style="text-align:center;margin:24px 0;">' +
+      '<a href="' + DOWNLOAD_URL + '" style="display:inline-block;' +
+      'background-color:#5C8A1E;color:#ffffff;text-decoration:none;' +
+      'font-weight:700;font-size:15px;padding:12px 32px;border-radius:8px;' +
+      'font-family:Arial,Tahoma,sans-serif;">הורדת ' + PRODUCT + '</a>' +
+    '</p>' +
+    '<p style="text-align:center;font-size:12px;color:#777;">' +
+      'אם הכפתור לא עובד, אפשר להעתיק את הקישור:<br>' +
+      '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;color:#5C8A1E;">' +
       DOWNLOAD_URL + '</a></p>' +
     '<p>בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
