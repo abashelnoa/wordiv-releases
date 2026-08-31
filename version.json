@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.0",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.0/Wordiv-Setup.exe",
-  "sha256": "a956bb9331f36cafba1c5bbab51f0e274ae12484ee43f4097f2d78d5a0654b34",
-  "release_notes": "חלונית גישה מהירה עם הסבר לכל פונקציה וטיפים, שיפור ניסוח בחלון מלא עם עשרה סגנונות, בניית פרומפט מטקסט מסומן, והכתבה מסודרת בפסקאות."
+  "latest_version": "1.4.1",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.1/Wordiv-Setup.exe",
+  "sha256": "5abdf33d4a1d224413263aa3e77f2ba79f54b9930d92e961b1c840b36eb3d474",
+  "release_notes": "עוזר כתיבה מלא ב-F3 (עשרה סגנונות, כתיבה מבריף), כתוביות חיות מהירות פי 2, פיצול המילון לשתי חלוניות, קיצורי מקלדת לבחירה חופשית, וכפתור \"איך?\" שמוביל עכשיו למדריכי הפעלה מלאים לכל ספק."
 }
