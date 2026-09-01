@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.2",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.2/Wordiv-Setup.exe",
-  "sha256": "3218d59195a71d133dd45e157d08684f4efe293165cd50cd6b00be5b2f62826b",
-  "release_notes": "תצוגה מצומצמת בהקלטה: במקום חלון הטקסט, פס קטן עם הלוגו שנע לפי הקול ומילה אחת — תמלול, תרגום או עוזר קולי. בסיום מופיע \"מתמלל…\" עד שהטקסט נכנס, ונעילת המקשים ברווח מסומנת במנעול קטן. אפשר להפעיל בהגדרות, בקטע מראה."
+  "latest_version": "1.4.3",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.3/Wordiv-Setup.exe",
+  "sha256": "8530acaf109d4612ac62c657c3784e4be145dda3a927dddfc1f5f970ae4e6723",
+  "release_notes": "שיפורים פנימיים ותיקוני יציבות."
 }
