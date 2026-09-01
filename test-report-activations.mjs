@@ -107,8 +107,14 @@ const m = (i) => String(i).padStart(16, '0');
         JSON.stringify(alertedAt) === JSON.stringify([4, 8, 16]));
   check('the subject names the code and the count',
         ctx.mails[0].subject.includes(CODE) && ctx.mails[0].subject.includes('4'));
-  check('the body says how to find whose code it is',
-        ctx.mails[0].body.includes('codes-<date>.csv'));
+  // The email is read in the one moment this whole feature exists for, so it
+  // has to carry the next action, not just the bad news.
+  check('the body gives the exact revoke command, with the code in it',
+        ctx.mails[0].body.includes(`revoke_code.py ${CODE}`));
+  check('the body says where the recipient is recorded',
+        ctx.mails[0].body.includes('signup'));
+  check('the body says how to tell which machine was first',
+        ctx.mails[0].body.includes('started_on'));
   check('the body says the next alert threshold',
         ctx.mails[0].body.includes('reaches 8'));
 }

@@ -68,11 +68,22 @@
  *                  how many times it has reported.
  *
  * WHEN YOU SPOT A LEAK
- *   Find the code prefix in the summary sheet, match it against your
- *   codes-<date>.csv to see whose code it was, then remove that ONE hash from
- *   beta-codes.json and push. Every machine using it is blocked at its next
- *   startup -- including the tester who leaked it, which cannot be avoided:
- *   the block is per code, not per machine.
+ *   Run  python revoke_code.py <the 12-character prefix from the email>
+ *   It names the code, shows who it was issued to if a codes-*.csv records
+ *   that, asks you to confirm, and removes that ONE hash. Then push.
+ *
+ *   NOTE ON "WHO": signup-autoreply.gs writes the recipient's email into the
+ *   SIGNUP SPREADSHEET's "codes" tab, not into the codes-*.csv on your disk --
+ *   those are the original mint and their assignment columns stay blank. So
+ *   the authoritative answer to "whose code was this" is that tab. To let
+ *   revoke_code.py answer it too, download that tab as CSV into the repo
+ *   folder as codes-<date>.csv now and then; the tool merges duplicates and
+ *   prefers whichever row knows the recipient.
+ *
+ *   Revoking blocks every machine on that code at its next startup --
+ *   including the tester it was issued to, which cannot be avoided: the block
+ *   is per code, not per machine. Issue them a fresh code afterwards; the
+ *   registry anchor means they resume their trial rather than restarting it.
  *
  * IF YOU EVER REDEPLOY
  *   Deploy -> Manage deployments -> edit the EXISTING deployment and bump its
@@ -263,8 +274,15 @@ function sendAlert(code, count, first, last) {
     'A tester with a desktop and a laptop is 2, and a Windows reinstall can',
     'make that 3. ' + count + ' is worth a look.',
     '',
-    'To find out whose code this is, search your codes-<date>.csv for the',
-    'code whose SHA-256 starts with ' + code + '.',
+    'WHOSE CODE IS IT: look it up in the signup spreadsheet\'s "codes" tab,',
+    'which records the email each code went to. Run',
+    '    python revoke_code.py ' + code,
+    'to have it name the code for you (and revoke it, after confirming).',
+    '',
+    'WHO ACTIVATED IT FIRST: in the "activations" tab, filter to this code',
+    'and sort by started_on, then first_seen. The earliest machine is the',
+    'one it was issued to -- which tells you who activated first, not who',
+    'passed it on.',
     '',
     'To shut it down: remove that one hash from beta-codes.json and push.',
     'Every machine on that code is blocked at its next startup -- including',

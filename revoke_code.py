@@ -92,11 +92,20 @@ def resolve(target: str) -> tuple[str, list[tuple[str, str, str, str]]]:
     lowered = text.lower()
     if _PREFIX_RE.match(lowered):
         matches = [r for r in rows if code_hash(r[0]).startswith(lowered)]
-        if len(matches) > 1:
-            sys.exit(f"error: '{text}' matches {len(matches)} codes. "
+        # Ambiguity means TWO DIFFERENT CODES, not two rows. The same code
+        # legitimately appears in several CSVs -- the original mint, plus any
+        # later export of the signup sheet with the assignments filled in --
+        # and refusing to act on that would break the tool exactly when it is
+        # being used properly.
+        distinct = {normalize(r[0]) for r in matches}
+        if len(distinct) > 1:
+            sys.exit(f"error: '{text}' matches {len(distinct)} different codes. "
                      "Nothing changed. Use more characters of the hash.")
-        if len(matches) == 1:
-            return code_hash(matches[0][0]), matches
+        if matches:
+            # Prefer the row that knows who it went to; the mint file has the
+            # code but blank assignment columns.
+            matches.sort(key=lambda r: (not r[1], r[3]))
+            return code_hash(matches[0][0]), matches[:1]
         if len(lowered) == 64:
             # A full hash that no CSV explains: still revocable, just anonymous.
             return lowered, []
