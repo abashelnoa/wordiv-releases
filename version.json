@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.3",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.3/Wordiv-Setup.exe",
-  "sha256": "8530acaf109d4612ac62c657c3784e4be145dda3a927dddfc1f5f970ae4e6723",
+  "latest_version": "1.4.4",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.4/Wordiv-Setup.exe",
+  "sha256": "7725a8b5647493a04f685953afef2c45a47e19ca8e8eb2b02a34fcd70941cf86",
   "release_notes": "שיפורים פנימיים ותיקוני יציבות."
 }
