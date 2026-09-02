@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.5",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.5/Wordiv-Setup.exe",
-  "sha256": "cb7d166428933e56789498d2f6c30a53d3d79f3e78d0a20e790a3e4ef992d795",
-  "release_notes": "העוזר הקולי נפתח כחלון שנשאר (הקלדה או הכתבה, הבחירה נקראת בלחיצה על בצע); שיפור ניסוח מקבל קובץ; תיקון ל-Ctrl שהפעיל תמלול; הודעות שגיאה ברורות מ-Gemini."
+  "latest_version": "1.4.6",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.6/Wordiv-Setup.exe",
+  "sha256": "b5c26efd38e9edbed03c47e3060bcfa8b6d7ddfe9fda165c204a3e323d83fe13",
+  "release_notes": "העוזר הקולי עובר למודל קטן יותר כש-Gemini עמוס או שהמכסה נגמרה; חלון העוזר שנשאר פתוח; העלאת קובץ בשיפור ניסוח; תיקון ל-Ctrl שהפעיל תמלול."
 }
