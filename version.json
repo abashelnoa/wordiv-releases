@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.6",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.6/Wordiv-Setup.exe",
-  "sha256": "b5c26efd38e9edbed03c47e3060bcfa8b6d7ddfe9fda165c204a3e323d83fe13",
-  "release_notes": "העוזר הקולי עובר למודל קטן יותר כש-Gemini עמוס או שהמכסה נגמרה; חלון העוזר שנשאר פתוח; העלאת קובץ בשיפור ניסוח; תיקון ל-Ctrl שהפעיל תמלול."
+  "latest_version": "1.4.7",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.7/Wordiv-Setup.exe",
+  "sha256": "c608874abea43b244b1b309c85a7db3b8a783927081086267acb17df7f7fdc9d",
+  "release_notes": "חלון פתיחה חדש בהתקנה ראשונה: מסביר איך התוכנה עובדת, איפה נמצאת לשונית הצד, ומפנה לסרטון ההדרכה ולעמוד השאלות הנפוצות."
 }
