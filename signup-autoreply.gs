@@ -62,6 +62,11 @@ var PRODUCT = 'Wordiv';
 // this ONE line to the site's download page and nothing else needs to move --
 // the file itself can still live on GitHub, or move anywhere the site links to.
 var DOWNLOAD_URL = 'https://www.wordiv.app/#/download';
+// The guide video. It is ALSO on the download page, and it belongs in both:
+// that page is unlinked from the site's navigation on purpose, so a tester who
+// has already installed the app has no way back to it. This mail is the only
+// thing they keep, so it has to carry the link itself.
+var VIDEO_URL = 'https://youtu.be/Z_Dnpc8J2WI';
 var TRIAL_DAYS = 60;
 var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
 
@@ -209,10 +214,15 @@ function sendCode(email, name, code) {
     'תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:\n\n' +
     '    ' + code + '\n\n' +
     'להורדה: ' + DOWNLOAD_URL + '\n\n' +
+    'מומלץ לצפות בסרטון ההדרכה לפני שמתחילים — לתוכנה יש הרבה מאוד יכולות, ' +
+    'וצריך לדעת איך להשתמש בהן כדי ליהנות באמת ממה שהיא נותנת. מתחת לסרטון ' +
+    'ביוטיוב יש חלוקה לפרקים, כך שאפשר לעבור ישירות ליכולת שמעניינת אותך.\n\n' +
+    'סרטון ההדרכה: ' + VIDEO_URL + '\n\n' +
     'בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.\n\n' +
     'הקוד אישי ומיועד רק לך — נא לא לשתף אותו.\n\n' +
+    'כדאי לשמור את המייל הזה: הוא מרכז את הקוד, קישור ההורדה וקישור לסרטון.\n\n' +
     'תודה שאת/ה עוזר/ת לנו לבדוק את התוכנה, ונשמח לשמוע ממך מה עובד ומה לא.\n';
 
   // The whole message is forced dir="rtl" / text-align:right, and only the
@@ -246,10 +256,29 @@ function sendCode(email, name, code) {
       'אם הכפתור לא עובד, אפשר להעתיק את הקישור:<br>' +
       '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;color:#5C8A1E;">' +
       DOWNLOAD_URL + '</a></p>' +
+    // The video gets a SECONDARY button -- outlined, not filled. Two solid
+    // green buttons would compete for the one action this mail exists for
+    // (download), and the raw URL is printed underneath for the same reason
+    // the download URL is: a tester coming back to this mail months later
+    // must be able to copy it out, not just click a button.
+    '<p style="margin-top:26px;"><b>מומלץ לצפות בסרטון ההדרכה לפני שמתחילים.</b> ' +
+    'לתוכנה יש הרבה מאוד יכולות, וצריך לדעת איך להשתמש בהן כדי ליהנות באמת ממה ' +
+    'שהיא נותנת. מתחת לסרטון ביוטיוב יש חלוקה לפרקים, כך שאפשר לעבור ישירות ' +
+    'ליכולת שמעניינת אותך.</p>' +
+    '<p style="text-align:center;margin:20px 0 6px;">' +
+      '<a href="' + VIDEO_URL + '" style="display:inline-block;' +
+      'background-color:#ffffff;color:#5C8A1E;border:2px solid #5C8A1E;' +
+      'text-decoration:none;font-weight:700;font-size:15px;padding:10px 28px;' +
+      'border-radius:8px;font-family:Arial,Tahoma,sans-serif;">צפייה בסרטון ההדרכה</a>' +
+    '</p>' +
+    '<p style="text-align:center;font-size:12px;color:#777;">' +
+      '<a dir="ltr" href="' + VIDEO_URL + '" style="direction:ltr;color:#5C8A1E;">' +
+      VIDEO_URL + '</a></p>' +
     '<p>בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.</p>' +
     '<p>הקוד אישי ומיועד רק לך — נא לא לשתף אותו.</p>' +
+    '<p>כדאי לשמור את המייל הזה: הוא מרכז את הקוד, קישור ההורדה וקישור לסרטון.</p>' +
     '<p>תודה שאת/ה עוזר/ת לנו לבדוק את התוכנה, ונשמח לשמוע ממך מה עובד ומה לא.</p>' +
     '</div>';
 
