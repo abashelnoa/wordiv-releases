@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.7",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.7/Wordiv-Setup.exe",
-  "sha256": "c608874abea43b244b1b309c85a7db3b8a783927081086267acb17df7f7fdc9d",
-  "release_notes": "חלון פתיחה חדש בהתקנה ראשונה: מסביר איך התוכנה עובדת, איפה נמצאת לשונית הצד, ומפנה לסרטון ההדרכה ולעמוד השאלות הנפוצות."
+  "latest_version": "1.4.8",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.8/Wordiv-Setup.exe",
+  "sha256": "2f89d534d1a8a45db9362639fd21da641b67a6f86658935238f1e57fa3a25e15",
+  "release_notes": "חלון המדיה צופה עכשיו בסרטוני יוטיוב: מדביקים קישור - עד 10 בבת אחת - ושואלים עליהם שאלות בלי לתמלל כלום. בנוסף: הפרדת דוברים עם שני מנועים לבחירה, העוזר הקולי קורא קישורים וצופה בסרטונים, וסרגל בטל/בצע בחלונות הכתיבה."
 }
