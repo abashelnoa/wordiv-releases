@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.8",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.8/Wordiv-Setup.exe",
-  "sha256": "2f89d534d1a8a45db9362639fd21da641b67a6f86658935238f1e57fa3a25e15",
-  "release_notes": "חלון המדיה צופה עכשיו בסרטוני יוטיוב: מדביקים קישור - עד 10 בבת אחת - ושואלים עליהם שאלות בלי לתמלל כלום. בנוסף: הפרדת דוברים עם שני מנועים לבחירה, העוזר הקולי קורא קישורים וצופה בסרטונים, וסרגל בטל/בצע בחלונות הכתיבה."
+  "latest_version": "1.4.9",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.9/Wordiv-Setup.exe",
+  "sha256": "9fc42f9a5ba5e99545357337576686bcc0099f96fc06b2252ec35c22c9d4378d",
+  "release_notes": "חלון המדיה מציג עכשיו את הקישורים שמדביקים כרשימה, לחיצה כפולה פותחת את הסרטון, והכפתורים לא יושבים יותר על תיבת התמלול. בנוסף: הלוג לא יכול יותר להפסיק להיכתב בשקט."
 }
