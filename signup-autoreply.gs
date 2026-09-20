@@ -67,6 +67,14 @@ var DOWNLOAD_URL = 'https://www.wordiv.app/#/download';
 // has already installed the app has no way back to it. This mail is the only
 // thing they keep, so it has to carry the link itself.
 var VIDEO_URL = 'https://youtu.be/Z_Dnpc8J2WI';
+// The two SmartScreen screenshots, with the control to click ringed on each.
+// They live beside the download page so the page and this mail cannot drift
+// apart, and they ride WITH the message rather than as remote <img> tags --
+// see smartScreenImages() for why that distinction is the whole point.
+var SMARTSCREEN_SHOTS = [
+  'https://www.wordiv.app/smartscreen-step1.png',
+  'https://www.wordiv.app/smartscreen-step2.png'
+];
 var TRIAL_DAYS = 60;
 var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
 
@@ -191,6 +199,40 @@ function claimNextCode(email) {
   return { code: chosen, remaining: remaining };
 }
 
+/**
+ * Fetch the two SmartScreen screenshots so they can be attached to the mail
+ * and referenced as cid:, instead of being linked from the web.
+ *
+ * Outlook and most corporate clients block remote images by default, and the
+ * one instruction in this mail that must never render as a broken box is the
+ * one that gets somebody past a screen telling them the file is dangerous.
+ * A cid: image is part of the message and always displays.
+ *
+ * ALL OR NOTHING on purpose: one screenshot arriving without the other would
+ * leave step 2 illustrated and step 1 not, which reads as a fault in the mail.
+ * An empty result sends the same message with no <img> tags at all -- both
+ * steps are spelled out in words regardless, so a failed fetch costs a
+ * nicety and never the instruction.
+ */
+function smartScreenImages() {
+  var out = {};
+  for (var i = 0; i < SMARTSCREEN_SHOTS.length; i++) {
+    try {
+      var res = UrlFetchApp.fetch(SMARTSCREEN_SHOTS[i], { muteHttpExceptions: true });
+      if (res.getResponseCode() !== 200) {
+        console.warn('SmartScreen shot ' + SMARTSCREEN_SHOTS[i] + ' returned ' +
+                     res.getResponseCode() + '; sending without screenshots.');
+        return {};
+      }
+      out['ss' + (i + 1)] = res.getBlob().setName('smartscreen-step' + (i + 1) + '.png');
+    } catch (err) {
+      console.warn('SmartScreen shot fetch failed: ' + err);
+      return {};
+    }
+  }
+  return out;
+}
+
 /** Minimal HTML escaping for text interpolated into htmlBody below. */
 function escapeHtml(text) {
   return String(text)
@@ -201,6 +243,8 @@ function escapeHtml(text) {
 }
 
 function sendCode(email, name, code) {
+  var inline = smartScreenImages();
+  var shots = Object.keys(inline).length === SMARTSCREEN_SHOTS.length;
   var helloText = name ? ('שלום ' + name + ',') : 'שלום,';
   var helloHtml = name ? ('שלום ' + escapeHtml(name) + ',') : 'שלום,';
 
@@ -218,6 +262,14 @@ function sendCode(email, name, code) {
     'וצריך לדעת איך להשתמש בהן כדי ליהנות באמת ממה שהיא נותנת. מתחת לסרטון ' +
     'ביוטיוב יש חלוקה לפרקים, כך שאפשר לעבור ישירות ליכולת שמעניינת אותך.\n\n' +
     'סרטון ההדרכה: ' + VIDEO_URL + '\n\n' +
+    'לפני ההתקנה — מסך כחול של Windows, וזה בסדר גמור:\n' +
+    'בפעם הראשונה שתריצו את הקובץ, Windows יציג מסך כחול שאומר "Windows הגן ' +
+    'על המחשב שלך". זה לא אומר שמשהו לא תקין בתוכנה — Windows מציג את המסך ' +
+    'הזה לכל תוכנה חדשה עד שמספיק אנשים בעולם הורידו אותה, ואנחנו בתחילת ' +
+    'הבטא. Wordiv חתומה דיגיטלית בתעודה רשמית על שם Shachar Perlman, ואחרי ' +
+    'לחיצה על "מידע נוסף" השם מופיע שם בשורת "מפרסם".\n' +
+    '    1. לוחצים על "מידע נוסף"\n' +
+    '    2. לוחצים על "הפעל בכל מקרה", וההתקנה ממשיכה כרגיל\n\n' +
     'בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.\n\n' +
@@ -274,6 +326,32 @@ function sendCode(email, name, code) {
     '<p style="text-align:center;font-size:12px;color:#777;">' +
       '<a dir="ltr" href="' + VIDEO_URL + '" style="direction:ltr;color:#5C8A1E;">' +
       VIDEO_URL + '</a></p>' +
+    // The blue SmartScreen appears seconds after the button above is
+    // pressed, so the walkthrough sits directly under it rather than at the
+    // end of the mail. Tone is deliberate: the reader has just been told by
+    // their operating system that this file is dangerous.
+    '<p style="margin-top:28px;"><b>לפני ההתקנה — מסך כחול של Windows, וזה בסדר גמור.</b></p>' +
+    '<p>בפעם הראשונה שתריצו את הקובץ, Windows יציג מסך כחול שאומר ' +
+    '<b>"Windows הגן על המחשב שלך"</b>. זה נשמע מפחיד, וזה לא אומר שמשהו לא ' +
+    'תקין בתוכנה: Windows סופר כמה אנשים בעולם כבר הורידו קובץ מסוים, ועד ' +
+    'שהמספר הזה גדל מספיק הוא מציג את המסך הזה לכל תוכנה חדשה — ואנחנו ' +
+    'בתחילת הבטא, אז אנחנו בדיוק שם.</p>' +
+    '<p>' + PRODUCT + ' <b>חתומה דיגיטלית</b> בתעודה רשמית על שם ' +
+    'Shachar Perlman, ואפשר לראות את זה במסך עצמו: ברגע שלוחצים על "מידע ' +
+    'נוסף" נפתחת שורת <b>מפרסם</b> עם השם. ככה יודעים שזה באמת הקובץ שלנו.</p>' +
+    '<p style="margin-top:18px;">אז כשהמסך הזה מופיע, שני צעדים:</p>' +
+    '<p style="margin:14px 0 4px;"><b>1.</b> לוחצים על ' +
+    '<b style="color:#5C8A1E;">מידע נוסף</b>.</p>' +
+    (shots ? '<p style="margin:0 0 18px;"><img src="cid:ss1" width="380" ' +
+      'alt="מסך SmartScreen עם הקישור מידע נוסף מסומן" ' +
+      'style="display:block;max-width:100%;height:auto;border:1px solid #ddd;' +
+      'border-radius:8px;"></p>' : '') +
+    '<p style="margin:14px 0 4px;"><b>2.</b> לוחצים על ' +
+    '<b style="color:#5C8A1E;">הפעל בכל מקרה</b>, וההתקנה ממשיכה כרגיל.</p>' +
+    (shots ? '<p style="margin:0 0 18px;"><img src="cid:ss2" width="380" ' +
+      'alt="אותו מסך אחרי לחיצה על מידע נוסף, עם הכפתור הפעל בכל מקרה מסומן" ' +
+      'style="display:block;max-width:100%;height:auto;border:1px solid #ddd;' +
+      'border-radius:8px;"></p>' : '') +
     '<p>בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.</p>' +
@@ -287,6 +365,7 @@ function sendCode(email, name, code) {
     subject: 'קוד הגישה שלך לבטא של ' + PRODUCT,
     body: body,
     htmlBody: htmlBody,
+    inlineImages: inline,
     name: PRODUCT
   });
 }
