@@ -31,7 +31,9 @@
  *          event source: From spreadsheet
  *          event type: On form submit
  *      Authorise it when Google asks (it needs to send mail as you).
- *   7. Submit the form yourself once and check the email arrives.
+ *   7. Run sendTestCode from the editor: it mails you the real thing with a
+ *      dummy code, so you can check it without spending one from the pool.
+ *      Then submit the form yourself once to prove the trigger fires too.
  *
  * WHEN THE POOL RUNS LOW
  *   Run make_code_batch.py again, push, and paste the new rows at the bottom
@@ -434,6 +436,25 @@ function sendSoldOut(email, name) {
     htmlBody: htmlBody,
     name: PRODUCT
   });
+}
+
+/**
+ * Run this by hand from the editor to see the real mail, without spending a
+ * code. It goes to whoever authorised the script -- you -- and the codes sheet
+ * is never opened, so nothing is claimed or marked as assigned.
+ *
+ * It calls sendCode itself rather than building its own preview. That is the
+ * point: a preview assembled separately drifts from the mail it is previewing
+ * the first time one of them is edited, and then quietly reassures you about
+ * something you are not sending.
+ */
+function sendTestCode() {
+  var to = Session.getEffectiveUser().getEmail();
+  // Five groups of four, the same shape a real code has, so the chip in the
+  // mail is the width it will really be -- a preview that lies about the
+  // layout is worse than no preview. Unmistakably fake all the same.
+  sendCode(to, 'בדיקה', 'TEST-TEST-TEST-TEST-TEST');
+  console.log('Test mail sent to ' + to + '. The codes sheet was not touched.');
 }
 
 /** Run this by hand from the editor to check the sheet is wired up. */
