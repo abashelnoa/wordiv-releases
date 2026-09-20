@@ -71,7 +71,7 @@ var DOWNLOAD_URL = 'https://www.wordiv.app/#/download';
 // has just been handed a code is about to install, and the video that gets
 // them started is the short one; the full guide is offered underneath it, in
 // text, for whoever wants to go deeper. That ordering matches the site.
-var OVERVIEW_URL = 'https://youtu.be/E2zdPmSvt4o';   // 13:00, all capabilities
+var OVERVIEW_URL = 'https://youtu.be/u7CgQM7wUaE';   // 13:00, all capabilities
 var GUIDE_URL = 'https://youtu.be/Z_Dnpc8J2WI';      // 38:15, chaptered
 // The two SmartScreen screenshots, with the control to click ringed on each.
 // They live beside the download page so the page and this mail cannot drift
