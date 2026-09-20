@@ -254,6 +254,15 @@ function sendCode(email, name, code) {
   var helloText = name ? ('שלום ' + name + ',') : 'שלום,';
   var helloHtml = name ? ('שלום ' + escapeHtml(name) + ',') : 'שלום,';
 
+  // ORDER MATTERS, and it is not the obvious one. The download button used to
+  // sit directly under the code, and people did exactly what that invites:
+  // copy the code, press download, leave. They never scrolled to the video or
+  // to the SmartScreen walkthrough, so they met the blue "Windows protected
+  // your PC" screen with no idea it was coming and no idea the guide existed.
+  // The button is now LAST, after the two things worth ninety seconds, and a
+  // line near the top says so -- a button that merely looks missing would send
+  // somebody back to the form.
+
   // Plain-text fallback for clients that can't render HTML. Gmail itself
   // prefers htmlBody below, which is what actually fixes the alignment --
   // a plain-text mail client picks each PARAGRAPH's direction from its own
@@ -263,10 +272,11 @@ function sendCode(email, name, code) {
     helloText + '\n\n' +
     'תודה שהצטרפת לבטא של ' + PRODUCT + '! הנה קוד הגישה האישי שלך:\n\n' +
     '    ' + code + '\n\n' +
-    'להורדה: ' + DOWNLOAD_URL + '\n\n' +
+    'לפני ההורדה — שתי דקות קריאה שיחסכו לך זמן. קישור ההורדה נמצא בתחתית ' +
+    'המייל, אחרי שני הדברים האלה.\n\n' +
     'מומלץ לצפות בסקירת היכולות לפני שמתחילים — 13 דקות שעוברות על כל מה ' +
-    'שהתוכנה יודעת לעשות, מחולקות לפרקים ביוטיוב. לתוכנה יש הרבה מאוד יכולות, וצריך לדעת איך להשתמש ' +
-    'בהן כדי ליהנות באמת ממה שהיא נותנת.\n\n' +
+    'שהתוכנה יודעת לעשות, מחולקות לפרקים ביוטיוב. לתוכנה יש הרבה מאוד יכולות, ' +
+    'וצריך לדעת איך להשתמש בהן כדי ליהנות באמת ממה שהיא נותנת.\n\n' +
     'סקירת היכולות (13 דקות): ' + OVERVIEW_URL + '\n\n' +
     'ואם בא לך להעמיק, יש גם מדריך מלא בן 38 דקות על התפעול של כל יכולת. הוא ' +
     'מחולק לפרקים ביוטיוב, כך שאפשר לעבור ישירות ליכולת שמעניינת אותך.\n\n' +
@@ -279,6 +289,8 @@ function sendCode(email, name, code) {
     'לחיצה על "מידע נוסף" השם מופיע שם בשורת "מפרסם".\n' +
     '    1. לוחצים על "מידע נוסף"\n' +
     '    2. לוחצים על "הפעל בכל מקרה", וההתקנה ממשיכה כרגיל\n\n' +
+    'וזהו — אפשר להוריד:\n' +
+    'להורדה: ' + DOWNLOAD_URL + '\n\n' +
     'בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
     'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
     'ההפעלה.\n\n' +
@@ -304,25 +316,16 @@ function sendCode(email, name, code) {
     '</p>' +
     '<p style="text-align:center;font-size:12px;color:#777;margin-top:-6px;">' +
       '(לחיצה כפולה על הקוד מסמנת אותו להעתקה)</p>' +
-    // A real button -- inline styles only, so it survives Outlook/Gmail
-    // stripping <style> blocks. No JavaScript: an email client cannot run
-    // a "copy" button, so the code above is a big, easy-to-select chip
-    // instead -- the same pattern Stripe/GitHub use for the same reason.
-    '<p style="text-align:center;margin:24px 0;">' +
-      '<a href="' + DOWNLOAD_URL + '" style="display:inline-block;' +
-      'background-color:#5C8A1E;color:#ffffff;text-decoration:none;' +
-      'font-weight:700;font-size:15px;padding:12px 32px;border-radius:8px;' +
-      'font-family:Arial,Tahoma,sans-serif;">הורדת ' + PRODUCT + '</a>' +
-    '</p>' +
-    '<p style="text-align:center;font-size:12px;color:#777;">' +
-      'אם הכפתור לא עובד, אפשר להעתיק את הקישור:<br>' +
-      '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;color:#5C8A1E;">' +
-      DOWNLOAD_URL + '</a></p>' +
-    // The video gets a SECONDARY button -- outlined, not filled. Two solid
-    // green buttons would compete for the one action this mail exists for
-    // (download), and the raw URL is printed underneath for the same reason
-    // the download URL is: a tester coming back to this mail months later
-    // must be able to copy it out, not just click a button.
+    // Says where the button went. Without this the mail reads as one that
+    // forgot to include a download link, and the fix for that is a second
+    // email, not a scroll.
+    '<p style="margin-top:24px;background:#F4F7EC;border-right:3px solid #5C8A1E;' +
+      'padding:12px 14px;"><b>לפני ההורדה — שתי דקות קריאה שיחסכו לך זמן.</b><br>' +
+      'כפתור ההורדה נמצא בתחתית המייל, אחרי שני הדברים האלה.</p>' +
+    // The video gets a SECONDARY button -- outlined, not filled, so it never
+    // competes with the download button below. The raw URL is printed under
+    // it because a tester coming back to this mail months later must be able
+    // to copy it out, not just click it.
     '<p style="margin-top:26px;"><b>מומלץ לצפות בסקירת היכולות לפני שמתחילים.</b> ' +
     '13 דקות שעוברות על כל מה שהתוכנה יודעת לעשות, מחולקות לפרקים ביוטיוב. ' +
     'לתוכנה יש הרבה מאוד יכולות, ' +
@@ -337,19 +340,17 @@ function sendCode(email, name, code) {
     '<p style="text-align:center;font-size:12px;color:#777;">' +
       '<a dir="ltr" href="' + OVERVIEW_URL + '" style="direction:ltr;color:#5C8A1E;">' +
       OVERVIEW_URL + '</a></p>' +
-    // The full guide stays a text link rather than a third button: two
-    // outlined buttons in a row would compete, and this mail already has one
-    // action it exists for.
+    // The full guide stays a text link rather than a third button.
     '<p style="margin-top:18px;">ואם בא לך להעמיק, יש גם ' +
       '<a href="' + GUIDE_URL + '" style="color:#5C8A1E;">מדריך מלא בן 38 דקות</a> ' +
       'על התפעול של כל יכולת. הוא מחולק לפרקים ביוטיוב, כך שאפשר לעבור ישירות ' +
       'ליכולת שמעניינת אותך.<br>' +
       '<a dir="ltr" href="' + GUIDE_URL + '" style="direction:ltr;color:#5C8A1E;' +
       'font-size:12px;">' + GUIDE_URL + '</a></p>' +
-    // The blue SmartScreen appears seconds after the button above is
-    // pressed, so the walkthrough sits directly under it rather than at the
-    // end of the mail. Tone is deliberate: the reader has just been told by
-    // their operating system that this file is dangerous.
+    // The walkthrough stays immediately ABOVE the download button, so the
+    // screen it describes is the last thing read before the file is fetched.
+    // Tone is deliberate: the reader is about to be told by their own
+    // operating system that this file is dangerous.
     '<p style="margin-top:28px;"><b>לפני ההתקנה — מסך כחול של Windows, וזה בסדר גמור.</b></p>' +
     '<p>בפעם הראשונה שתריצו את הקובץ, Windows יציג מסך כחול שאומר ' +
     '<b>"Windows הגן על המחשב שלך"</b>. זה נשמע מפחיד, וזה לא אומר שמשהו לא ' +
@@ -372,9 +373,22 @@ function sendCode(email, name, code) {
       'alt="אותו מסך אחרי לחיצה על מידע נוסף, עם הכפתור הפעל בכל מקרה מסומן" ' +
       'style="display:block;max-width:100%;height:auto;border:1px solid #ddd;' +
       'border-radius:8px;"></p>' : '') +
-    '<p>בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש פעם אחת בלבד, וצריך חיבור ' +
-    'לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' + TRIAL_DAYS + ' יום מרגע ' +
-    'ההפעלה.</p>' +
+    // THE action of this mail, and the reason everything above it is short.
+    // Inline styles only, so it survives Outlook/Gmail stripping <style>.
+    '<p style="margin-top:32px;text-align:center;"><b>וזהו — אפשר להוריד.</b></p>' +
+    '<p style="text-align:center;margin:14px 0;">' +
+      '<a href="' + DOWNLOAD_URL + '" style="display:inline-block;' +
+      'background-color:#5C8A1E;color:#ffffff;text-decoration:none;' +
+      'font-weight:700;font-size:16px;padding:14px 38px;border-radius:8px;' +
+      'font-family:Arial,Tahoma,sans-serif;">הורדת ' + PRODUCT + '</a>' +
+    '</p>' +
+    '<p style="text-align:center;font-size:12px;color:#777;">' +
+      'אם הכפתור לא עובד, אפשר להעתיק את הקישור:<br>' +
+      '<a dir="ltr" href="' + DOWNLOAD_URL + '" style="direction:ltr;color:#5C8A1E;">' +
+      DOWNLOAD_URL + '</a></p>' +
+    '<p style="margin-top:26px;">בהפעלה הראשונה תתבקש/י להזין את הקוד. זה נדרש ' +
+    'פעם אחת בלבד, וצריך חיבור לאינטרנט רק לרגע הזה. תקופת הניסיון שלך היא ' +
+    TRIAL_DAYS + ' יום מרגע ההפעלה.</p>' +
     '<p>הקוד אישי ומיועד רק לך — נא לא לשתף אותו.</p>' +
     '<p>כדאי לשמור את המייל הזה: הוא מרכז את הקוד, קישור ההורדה והקישורים ' +
     'לסרטונים.</p>' +
