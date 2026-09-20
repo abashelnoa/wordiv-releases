@@ -88,13 +88,61 @@ var LOW_WATER_MARK = 10;          // warn you when fewer than this remain
 
 // ---- the trigger ---------------------------------------------------------
 
+/**
+ * Your own address, for the alerts this script sends you and for sendTestCode.
+ *
+ * `Session.getEffectiveUser().getEmail()` returns an EMPTY STRING unless the
+ * script holds the userinfo.email scope, and on some account types it returns
+ * one regardless. That is where "Failed to send email: no recipient" comes
+ * from, and it was quietly fatal in three places long before anything read the
+ * address on purpose: the pool-is-low alert throws AFTER the code has already
+ * gone out, so the tester is served, you are told nothing, and the only trace
+ * is a red line in the execution log you have no reason to look at.
+ *
+ * The script property wins, and exists so a PUBLIC repository never carries a
+ * personal address: Apps Script -> Project Settings -> Script properties, name
+ * it OWNER_EMAIL. Everything else is a fallback.
+ *
+ * Returns '' rather than throwing. Callers decide: an alert that cannot find
+ * its recipient must not take the signup down with it, while sendTestCode --
+ * run by hand, by you -- should say plainly what to fix.
+ */
+function ownerEmail() {
+  try {
+    var set = PropertiesService.getScriptProperties().getProperty('OWNER_EMAIL');
+    if (set && set.trim()) { return set.trim(); }
+  } catch (err) {
+    console.warn('could not read script properties: ' + err);
+  }
+  try {
+    var eff = Session.getEffectiveUser().getEmail();
+    if (eff) { return eff; }
+  } catch (err) { /* no scope for it; try the other one */ }
+  try {
+    var act = Session.getActiveUser().getEmail();
+    if (act) { return act; }
+  } catch (err) { /* nothing left to try */ }
+  return '';
+}
+
+/** Send yourself an alert, or log why you could not be reached. */
+function alertOwner(subject, body) {
+  var to = ownerEmail();
+  if (!to) {
+    console.error('No owner address, so this alert was not sent. Set a script '
+                  + 'property named OWNER_EMAIL. The alert was: ' + subject);
+    return;
+  }
+  MailApp.sendEmail(to, subject, body);
+}
+
 function onFormSubmit(e) {
   var answers = readAnswers(e);
   var email = pick(answers, EMAIL_QUESTION, EMAIL_ALIASES) || respondentEmail(e);
   if (!email) {
     console.error('No email in the submission; nothing sent. Columns seen: ' +
                   Object.keys(answers).join(', '));
-    MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
+    alertOwner(
       PRODUCT + ' beta: a signup had no email address',
       'A form response arrived with no usable email address, so no code was ' +
       'sent. Columns seen:\n\n  ' + Object.keys(answers).join('\n  ') +
@@ -122,7 +170,7 @@ function onFormSubmit(e) {
     // without this they never learn why no code arrived. The admin alert
     // stays as the actionable "go mint more" nudge.
     sendSoldOut(email, pick(answers, NAME_QUESTION, NAME_ALIASES));
-    MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
+    alertOwner(
       PRODUCT + ' בטא: נגמרו הקודים',
       'מישהו נרשם (' + email + ') ולא נשארו קודים - נשלחה לו הודעת "אזלו הקודים".\n' +
       'הרץ python make_code_batch.py, דחוף, והדבק את השורות החדשות ללשונית "' +
@@ -133,7 +181,7 @@ function onFormSubmit(e) {
   sendCode(email, pick(answers, NAME_QUESTION, NAME_ALIASES), code);
 
   if (remaining < LOW_WATER_MARK) {
-    MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
+    alertOwner(
       PRODUCT + ' בטא: נשארו רק ' + remaining + ' קודים',
       'זמן לייצר עוד:\n\n  python make_code_batch.py 100\n' +
       '  git add beta-codes.json && git commit -m "Publish 100 beta codes"\n' +
@@ -449,7 +497,12 @@ function sendSoldOut(email, name) {
  * something you are not sending.
  */
 function sendTestCode() {
-  var to = Session.getEffectiveUser().getEmail();
+  var to = ownerEmail();
+  if (!to) {
+    throw new Error('No address to send the test to. Open Project Settings -> '
+                    + 'Script properties and add one named OWNER_EMAIL with '
+                    + 'your own email address, then run this again.');
+  }
   // Five groups of four, the same shape a real code has, so the chip in the
   // mail is the width it will really be -- a preview that lies about the
   // layout is worse than no preview. Unmistakably fake all the same.
