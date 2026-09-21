@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.5.0",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.0/Wordiv-Setup.exe",
-  "sha256": "0e877f8e3c4b47aeee9e10fae6060d327c8e98f3ba5f5d81c2fc42d30cee69f0",
-  "release_notes": "19 שפות הכתבה חדשות (38 בסך הכל), תצוגה מצומצמת בהקלטה כברירת מחדל, ואפשרות לכבות את חלונית האישור אחרי הכנסת טקסט."
+  "latest_version": "1.5.1",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.1/Wordiv-Setup.exe",
+  "sha256": "04140262a6002c82eaf9cb0d790c68554087693ca20a8d807793effdca31c3b1",
+  "release_notes": "מצב בהיר חדש (הגדרות ← עיצוב), חלונות מהלשונית הצפה נפתחים מלפנים, ותיקון אבטחה למפתח Gemini ביומן."
 }
