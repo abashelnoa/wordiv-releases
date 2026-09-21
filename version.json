@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.4.9",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.4.9/Wordiv-Setup.exe",
-  "sha256": "9fc42f9a5ba5e99545357337576686bcc0099f96fc06b2252ec35c22c9d4378d",
-  "release_notes": "חלון המדיה מציג עכשיו את הקישורים שמדביקים כרשימה, לחיצה כפולה פותחת את הסרטון, והכפתורים לא יושבים יותר על תיבת התמלול. בנוסף: הלוג לא יכול יותר להפסיק להיכתב בשקט."
+  "latest_version": "1.5.0",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.0/Wordiv-Setup.exe",
+  "sha256": "0e877f8e3c4b47aeee9e10fae6060d327c8e98f3ba5f5d81c2fc42d30cee69f0",
+  "release_notes": "19 שפות הכתבה חדשות (38 בסך הכל), תצוגה מצומצמת בהקלטה כברירת מחדל, ואפשרות לכבות את חלונית האישור אחרי הכנסת טקסט."
 }
