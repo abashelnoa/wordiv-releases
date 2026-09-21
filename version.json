@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.5.1",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.1/Wordiv-Setup.exe",
-  "sha256": "04140262a6002c82eaf9cb0d790c68554087693ca20a8d807793effdca31c3b1",
-  "release_notes": "מצב בהיר חדש (הגדרות ← עיצוב), חלונות מהלשונית הצפה נפתחים מלפנים, ותיקון אבטחה למפתח Gemini ביומן."
+  "latest_version": "1.5.2",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.2/Wordiv-Setup.exe",
+  "sha256": "a007ad86b768f37178343fb0bf50354d2f88cb2a586baa08df35408370ab4ab8",
+  "release_notes": "הגדרות: שינוי מנועים ושפות רק בלחיצה על \"שינוי\", סדר חדש לפי סדר ההתקנה, ותיקון כיוון בעברית."
 }
