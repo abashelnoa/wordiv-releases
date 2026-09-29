@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.5.2",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.5.2/Wordiv-Setup.exe",
-  "sha256": "a007ad86b768f37178343fb0bf50354d2f88cb2a586baa08df35408370ab4ab8",
-  "release_notes": "הגדרות: שינוי מנועים ושפות רק בלחיצה על \"שינוי\", סדר חדש לפי סדר ההתקנה, ותיקון כיוון בעברית."
+  "latest_version": "1.6.0",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.6.0/Wordiv-Setup.exe",
+  "sha256": "bef6898ca155242c1458e07789d74528b29bf7038fe222d9d20b086315a78cc1",
+  "release_notes": "התחברות עם Google - בלי מפתחות API. חינם בתקופת הבטא, עם מכסת שימוש חודשית."
 }
