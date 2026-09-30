@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.6.0",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.6.0/Wordiv-Setup.exe",
-  "sha256": "bef6898ca155242c1458e07789d74528b29bf7038fe222d9d20b086315a78cc1",
-  "release_notes": "התחברות עם Google - בלי מפתחות API. חינם בתקופת הבטא, עם מכסת שימוש חודשית."
+  "latest_version": "1.7.0",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.7.0/Wordiv-Setup.exe",
+  "sha256": "fe462acd8aa7221793be813d82d983086a6a73220ad6545214e2f209917fe6f7",
+  "release_notes": "מסלולים: 30 יום של בטא מלאה, ואז מעבר אוטומטי למסלול החינמי. בהגדרות רואים את המסלול והמכסות."
 }
