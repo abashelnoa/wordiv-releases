@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.7.0",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.7.0/Wordiv-Setup.exe",
-  "sha256": "fe462acd8aa7221793be813d82d983086a6a73220ad6545214e2f209917fe6f7",
-  "release_notes": "מסלולים: 30 יום של בטא מלאה, ואז מעבר אוטומטי למסלול החינמי. בהגדרות רואים את המסלול והמכסות."
+  "latest_version": "1.7.1",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.7.1/Wordiv-Setup.exe",
+  "sha256": "54c03a3dafa29a7fa756146ec3e072d7327377c29e2e47a207d00ad48d07cc48",
+  "release_notes": "תיקוני ניסוח בהגדרות, וקישור קבוע למדריך הווידאו."
 }
