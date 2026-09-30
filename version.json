@@ -1,6 +1,6 @@
 {
-  "latest_version": "1.7.2",
-  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.7.2/Wordiv-Setup.exe",
-  "sha256": "2387eaa9acc466737065c5aa74539d1b7c1ca7b52f95923dce95b79e8236ddb9",
-  "release_notes": "במסלול החינמי, מתחת לכל מד בהגדרות כתוב מה הוא כולל."
+  "latest_version": "1.7.3",
+  "download_url": "https://github.com/abashelnoa/wordiv-releases/releases/download/v1.7.3/Wordiv-Setup.exe",
+  "sha256": "2f7430ab7e4c587b9a35e220f2f4a566f6db9030b493eb07759091a85cef7163",
+  "release_notes": "הוראות מעודכנות וסרטון ההדרכה החדש."
 }
